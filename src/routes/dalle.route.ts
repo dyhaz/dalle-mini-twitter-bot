@@ -13,6 +13,7 @@ class DalleRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, this.controller.generate);
+    this.router.get(`${this.path}/generate`, this.controller.generate);
   }
 }
 
