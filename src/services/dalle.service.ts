@@ -8,12 +8,12 @@ class DalleService {
       response = await axios.post(
         'https://bf.dallemini.ai/generate',
         {
-          method: 'post',
-          headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-          data: { prompt: text },
+          prompt: text,
         },
         {
-          timeout: 10000,
+          timeout: 100000,
+          method: 'post',
+          headers: { Accept: 'application/json', 'Content-Type': 'application/json' }
         },
       );
       response = await response.json();
