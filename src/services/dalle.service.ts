@@ -6,9 +6,9 @@ class DalleService {
 
     try {
       response = await axios.post('https://bf.dallemini.ai/generate', {
-        method: 'POST',
+        method: 'post',
         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-        data: JSON.stringify({ prompt: text }),
+        data: { prompt: text },
       });
       response = await response.json();
       return response.images.map(r => 'data:image/png;base64,' + r);

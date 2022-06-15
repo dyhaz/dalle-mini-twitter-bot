@@ -6,7 +6,8 @@ class DalleController {
 
   public generate = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const text = 'donald trump';
-    res.status(200).json(this.service.generate(text));
+    const result = await this.service.generate(text);
+    res.status(200).json(result);
   };
 }
 
