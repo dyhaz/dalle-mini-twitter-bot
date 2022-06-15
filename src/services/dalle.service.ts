@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 class DalleService {
-  public async generate(text: string) {
+  public async generate(text: string): Promise<{ images: any[]; version: string } | any> {
     let response;
 
     try {
