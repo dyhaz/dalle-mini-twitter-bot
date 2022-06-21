@@ -13,7 +13,7 @@ class DalleService {
         {
           timeout: 100000,
           method: 'post',
-          headers: { Accept: 'application/json', 'Content-Type': 'application/json' }
+          headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
         },
       );
       response = await response.json();

@@ -5,7 +5,7 @@ class DalleController {
   service = new dalleService();
 
   public generate = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-    const text = 'donald trump';
+    const text = req.params.text ? req.params.text : 'donald trump';
     const result = await this.service.generate(text);
     res.status(200).json(result);
   };

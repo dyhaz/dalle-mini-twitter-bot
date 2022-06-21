@@ -7,10 +7,11 @@ import hpp from 'hpp';
 import morgan from 'morgan';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS } from '@config';
+import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS, BEARER_TOKEN } from '@config';
 import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
+import { TwitterApi } from 'twitter-api-v2';
 
 class App {
   public app: express.Application;
@@ -26,6 +27,9 @@ class App {
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
+    this.initializeTwt().then(r => {
+      console.log(r);
+    });
   }
 
   public listen() {
@@ -76,6 +80,21 @@ class App {
 
   private initializeErrorHandling() {
     this.app.use(errorMiddleware);
+  }
+
+  private async initializeTwt() {
+    // Instanciate with desired auth type (here's Bearer v2 auth)
+    const client = new TwitterApi(BEARER_TOKEN);
+
+    // Tell typescript it's a readonly app
+    const roClient = client.readOnly;
+
+    // Play with the built in methods
+    const user = await roClient.v2.userByUsername('plhery');
+    await client.v1.tweet('Hello, this is a test.');
+
+    // You can upload media easily!
+    await client.v1.uploadMedia('./big-buck-bunny.mp4');
   }
 }
 
