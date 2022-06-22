@@ -27,9 +27,9 @@ class App {
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
-    this.initializeTwt().then(r => {
-      console.log(r);
-    });
+    // this.initializeTwt().then(r => {
+    //   console.log(r);
+    // });
   }
 
   public listen() {
