@@ -7,7 +7,7 @@ import hpp from 'hpp';
 import morgan from 'morgan';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS, BEARER_TOKEN } from '@config';
+import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS, CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_SECRET } from '@config';
 import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
@@ -17,6 +17,7 @@ class App {
   public app: express.Application;
   public env: string;
   public port: string | number;
+  public apiClient: TwitterApi;
 
   constructor(routes: Routes[]) {
     this.app = express();
@@ -82,19 +83,24 @@ class App {
     this.app.use(errorMiddleware);
   }
 
-  private async initializeTwt() {
+  public async initializeTwt() {
     // Instanciate with desired auth type (here's Bearer v2 auth)
-    const client = new TwitterApi(BEARER_TOKEN);
+    this.apiClient = new TwitterApi({
+      appKey: CONSUMER_KEY,
+      appSecret: CONSUMER_SECRET,
+      accessSecret: ACCESS_SECRET,
+      accessToken: ACCESS_TOKEN,
+    });
 
     // Tell typescript it's a readonly app
-    const roClient = client.readOnly;
+    const roClient = this.apiClient.readOnly;
 
     // Play with the built in methods
-    const user = await roClient.v2.userByUsername('plhery');
-    await client.v1.tweet('Hello, this is a test.');
+    // await this.apiClient.v1.tweet('Hello, this is a test.');
 
-    // You can upload media easily!
-    await client.v1.uploadMedia('./big-buck-bunny.mp4');
+    // Read latest replies
+    const reps = await roClient.v1.tweets('1225917697675886593');
+    console.log(reps);
   }
 }
 
